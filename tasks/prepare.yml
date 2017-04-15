@@ -1,0 +1,36 @@
+---
+- name: Install dependencies (apt)
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - bc
+    - build-essential
+    - debootstrap
+    - dosfstools
+    - gcc-aarch64-linux-gnu
+    - git
+    - ubuntu-keyring
+    - parted
+  when: ansible_pkg_mgr == "apt"
+
+- name: Install dependencies (pacman)
+  pacman:
+    name: "{{ item }}"
+  with_items:
+    - aarch64-linux-gnu-gcc
+    - base-devel
+    - bc
+    - debootstrap
+    - dosfstools
+    - git
+    - parted
+  when: ansible_pkg_mgr == "pacman"
+
+- name: Create cache directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ global_cache_dir }}"
+    - "{{ global_cache_dir }}/rpi3-mount"
+    - "{{ global_cache_dir }}/rpi3-firmware"

@@ -1,0 +1,61 @@
+---
+- name: Copy firmware to boot partition
+  shell:
+    cmd: "cp -ar {{ global_cache_dir }}/rpi3-firmware/firmware-master/boot/* {{ global_cache_dir }}/rpi3-mount/boot/"
+    creates: "{{ global_cache_dir }}/rpi3-mount/boot/start.elf"
+
+- name: Copy kernel to boot partition
+  copy:
+    src: "{{ global_cache_dir }}/rpi3-kernel/arch/arm64/boot/Image"
+    dest: "{{ global_cache_dir }}/rpi3-mount/boot/arm64-kernel.img"
+    remote_src: True
+
+- name: Install the kernel modules
+  command:
+    cmd: "make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- INSTALL_MOD_PATH={{ global_cache_dir }}/rpi3-mount modules_install"
+    chdir: "{{ global_cache_dir }}/rpi3-kernel"
+    creates: "{{ global_cache_dir }}/rpi3-mount/lib/modules"
+
+- name: Create overlay directory
+  file:
+    path: "{{ global_cache_dir }}/rpi3-mount/boot/overlays"
+    state: directory
+
+- name: Find overlays
+  find:
+    paths: "{{ global_cache_dir }}/rpi3-kernel/arch/arm64/boot/overlays"
+    file_type: file
+    patterns: "*.dtb"
+    recurse: yes
+  register: overlays
+
+- name: Copy overlays
+  copy:
+    src: "{{ item.path }}"
+    dest: "{{ global_cache_dir }}/rpi3-kernel/arch/arm64/boot/overlays/"
+    remote_src: True
+  with_items: "{{ overlays.files }}"
+
+- name: Enable arm64
+  copy:
+    content: "arm_control=0x200\nkernel=arm64-kernel.img\n"
+    dest: "{{ global_cache_dir }}/rpi3-mount/boot/config.txt"
+
+- name: Write kernel command line
+  copy:
+    content: "console=tty1 root=/dev/mmcblk1p2 rootfstype=ext4 rootwait rw init=/lib/systemd/systemd net.ifnames=0\n"
+    dest: "{{ global_cache_dir }}/rpi3-mount/boot/cmdline.txt"
+
+- name: Create fstab
+  copy:
+    content: "/dev/mmcblk1p1 /boot vfat defaults 0 0\n"
+    dest: "{{ global_cache_dir }}/rpi3-mount/etc/fstab"
+
+- name: Configure networking
+  template:
+    src: interfaces.j2
+    dest: "{{ global_cache_dir }}/rpi3-mount/etc/network/interfaces"
+    mode: 0644
+    owner: root
+    group: root
+

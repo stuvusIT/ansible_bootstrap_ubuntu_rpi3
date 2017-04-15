@@ -1,0 +1,10 @@
+---
+- name: Unmount boot
+  command: "umount {{ global_cache_dir }}/rpi3-mount/boot"
+  changed_when: false
+  failed_when: false
+
+- name: Unmount root
+  command: "umount {{ global_cache_dir }}/rpi3-mount"
+  changed_when: false
+  failed_when: false

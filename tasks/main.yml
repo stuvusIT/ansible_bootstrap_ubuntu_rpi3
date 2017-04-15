@@ -1,0 +1,15 @@
+---
+- include: prepare.yml
+- include: partitions.yml
+- include: firmware.yml
+- include: kernel.yml
+# Mount partitions and add data
+- block:
+  - include: mount.yml
+  - include: debootstrap.yml
+  - include: boot.yml
+  - include: user.yml
+  rescue:
+    - include: umount.yml
+- include: umount.yml
+

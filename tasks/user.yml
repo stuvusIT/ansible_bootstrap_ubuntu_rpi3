@@ -1,0 +1,26 @@
+---
+- name: Set root password
+  lineinfile:
+    path: "{{ global_cache_dir | mandatory }}/rpi3-mount/etc/shadow"
+    regexp: "^root:"
+    line: "root:{{ bootstrap_root_password }}:::99999::::"
+  when: "bootstrap_root_password is defined"
+
+- name: Create SSH directory
+  file:
+    path: "{{ global_cache_dir | mandatory }}/rpi3-mount/root/.ssh"
+    state: directory
+    mode: 0700
+    owner: root
+    group: root
+  when: "bootstrap_root_key is defined"
+
+- name: Set root SSH key
+  copy:
+    content: "{{ bootstrap_root_key }}"
+    dest: "{{ global_cache_dir | mandatory }}/rpi3-mount/root/.ssh/authorized_keys"
+    mode: 0644
+    owner: root
+    group: root
+  when: "bootstrap_root_key is defined"
+

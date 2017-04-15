@@ -1,0 +1,24 @@
+---
+- name: Mount root
+  mount:
+    src: "{{ bootstrap_device }}2"
+    path: "{{ global_cache_dir }}/rpi3-mount"
+    fstype: ext4
+    state: mounted
+    fstab: /tmp/fstab
+
+- name: Make boot directory
+  file:
+    path: "{{ global_cache_dir }}/rpi3-mount/boot"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Mount boot
+  mount:
+    src: "{{ bootstrap_device }}1"
+    path: "{{ global_cache_dir }}/rpi3-mount/boot"
+    fstype: vfat
+    state: mounted
+    fstab: /tmp/fstab

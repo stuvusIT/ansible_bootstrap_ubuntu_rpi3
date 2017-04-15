@@ -1,0 +1,7 @@
+---
+global_cores: 1
+bootstrap_qemu: /usr/bin/qemu-aarch64-static
+bootstrap_boot_size: 1GiB
+bootstrap_kernel_version: 4.11.y
+bootstrap_extraversion: +stuvus
+bootstrap_ubuntu_release: yakkety

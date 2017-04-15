@@ -1,0 +1,36 @@
+---
+- name: Debootstrap Ubuntu
+  command:
+    cmd: >
+      debootstrap --foreign --arch arm64
+      --variant minbase
+      --include systemd,ifupdown,openssh-server,python,dnsutils,udev
+      "{{ bootstrap_ubuntu_release | mandatory }}"
+      "{{ global_cache_dir | mandatory }}/rpi3-mount"
+       http://ports.ubuntu.com/
+    creates: "{{ global_cache_dir | mandatory }}/rpi3-mount/etc"
+
+- name: Copy QEMU
+  copy:
+    src: "{{ bootstrap_qemu | mandatory }}"
+    dest: "{{ global_cache_dir | mandatory }}/rpi3-mount/{{ bootstrap_qemu | mandatory }}"
+    owner: root
+    group: root
+    mode: 0755
+    remote_src: True
+
+- name: Execute debootstrap stage 2
+  command:
+    cmd: "chroot '{{ global_cache_dir | mandatory }}/rpi3-mount' /debootstrap/debootstrap --second-stage"
+    creates: "{{ global_cache_dir | mandatory }}/rpi3-mount/etc/ssh"
+  environment:
+    LANG: C
+
+- name: Clean image
+  file:
+    path: "{{ global_cache_dir | mandatory }}/rpi3-mount{{ item }}"
+    state: absent
+  with_items:
+    - "{{ bootstrap_qemu }}"
+    - "/debootstrap"
+    - /etc/hostname

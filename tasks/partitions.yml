@@ -1,0 +1,30 @@
+---
+- name: Create boot partition
+  parted:
+    device: "{{ bootstrap_device | mandatory }}"
+    number: 1
+    part_end: "{{ bootstrap_boot_size | mandatory }}"
+    part_type: primary
+
+- name: Create root partition
+  parted:
+    device: "{{ bootstrap_device | mandatory }}"
+    number: 2
+    part_type: primary
+
+- name: Assign LBA flag
+  command: "parted {{ bootstrap_device | mandatory }} set 1 lba on"
+  changed_when: false
+
+- name: Make FAT32
+  filesystem:
+    dev: "{{ bootstrap_device | mandatory }}1"
+    fstype: fat
+    opts: "-F 32 -n BOOT"
+
+- name: Make ext4
+  filesystem:
+    dev: "{{ bootstrap_device | mandatory }}2"
+    fstype: ext4
+    opts: "-L root"
+
