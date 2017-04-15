@@ -1,0 +1,14 @@
+---
+- name: Download firmware archive
+  get_url:
+    url: "https://github.com/raspberrypi/firmware/archive/master.zip"
+    dest: "{{ global_cache_dir }}/rpi3-firmware.zip"
+    mode: 0600
+    owner: root
+    group: root
+
+- name: Extract firmware
+  unarchive:
+    src: "{{ global_cache_dir }}/rpi3-firmware.zip"
+    dest: "{{ global_cache_dir }}/rpi3-firmware"
+    remote_src: True

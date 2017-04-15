@@ -1,0 +1,27 @@
+---
+- name: Clone kernel
+  git:
+    repo: https://github.com/raspberrypi/linux.git
+    dest: "{{ global_cache_dir }}/rpi3-kernel"
+    version: "rpi-{{ bootstrap_kernel_version }}"
+    depth: 1
+    force: yes
+
+- name: Insert extra version to kernel
+  lineinfile:
+    dest: "{{ global_cache_dir }}/rpi3-kernel/Makefile"
+    regexp: "^EXTRAVERSION = "
+    line: "EXTRAVERSION = {{ bootstrap_extraversion }}"
+
+- name: Configure kernel
+  command:
+    cmd: make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcmrpi3_defconfig
+    chdir: "{{ global_cache_dir }}/rpi3-kernel"
+  changed_when: false
+
+- name: Build kernel
+  command:
+    cmd: "make -j {{ global_cores }} ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image modules dtbs"
+    chdir: "{{ global_cache_dir }}/rpi3-kernel"
+  register: out
+  changed_when: "'LD' in out.stdout"
