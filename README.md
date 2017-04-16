@@ -53,7 +53,7 @@ On Arch, you also need the Ubuntu keyring package from the AUR.
 | Name                      | Required                 | Default | Description                                        |
 |---------------------------|:------------------------:|---------|----------------------------------------------------|
 | `bootstrap_root_key`      | :heavy_multiplication_x: |         | Public SSH key to add to `authorized_keys` of root |
-| `bootstrap_root_password` | :heavy_multiplication_x: |         | Password to set for the root user                  |
+| `bootstrap_root_password` | :heavy_multiplication_x: |         | `crypt(3)` password hash to set for the root user  |
 
 #### Network
 
