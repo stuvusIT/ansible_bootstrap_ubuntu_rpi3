@@ -7,7 +7,7 @@
     state: mounted
     fstab: /tmp/fstab
 
-- name: Make boot directory
+- name: Create boot directory
   file:
     path: "{{ global_cache_dir }}/rpi3-mount/boot"
     state: directory
