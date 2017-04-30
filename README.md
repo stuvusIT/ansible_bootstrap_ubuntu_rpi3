@@ -26,27 +26,27 @@ On Arch, you also need the Ubuntu keyring package from the AUR.
 
 #### Global
 
-| Name               | Required           | Default | Description                                                                                   |
-|--------------------|:------------------:|---------|-----------------------------------------------------------------------------------------------|
-| `global_cache_dir` | :heavy_check_mark: |         | Path where files are downloaded and extracted. Also, the SD card is mounted in a subdirectory |
-| `global_cores`     | :heavy_check_mark: | `1`     | Amount of CPU cores in the control machine to build with                                      |
+| Name               | Required                 | Default | Description                                                                                   |
+|--------------------|:------------------------:|---------|-----------------------------------------------------------------------------------------------|
+| `global_cache_dir` | :heavy_check_mark:       |         | Path where files are downloaded and extracted. Also, the SD card is mounted in a subdirectory |
+| `global_cores`     | :heavy_multiplication_x: | `1`     | Amount of CPU cores in the control machine to build with                                      |
 
 
 #### General
 
-| Name                  | Required           | Default                        | Description                                   |
-|-----------------------|:------------------:|--------------------------------|-----------------------------------------------|
-| `bootstrap_device`    | :heavy_check_mark: |                                | The SD card to install on (`/dev` path)       |
-| `bootstrap_qemu`      | :heavy_check_mark: | `/usr/bin/qemu-aarch64-static` | Path to the static aarch64 qemu on your sytem |
-| `bootstrap_boot_size` | :heavy_check_mark: | `1GiB`                         | Size of `/boot` on the Raspberry Pi           |
+| Name                  | Required                 | Default                        | Description                                   |
+|-----------------------|:------------------------:|--------------------------------|-----------------------------------------------|
+| `bootstrap_device`    | :heavy_check_mark:       |                                | The SD card to install on (`/dev` path)       |
+| `bootstrap_qemu`      | :heavy_multiplication_x: | `/usr/bin/qemu-aarch64-static` | Path to the static aarch64 qemu on your sytem |
+| `bootstrap_boot_size` | :heavy_multiplication_x: | `1GiB`                         | Size of `/boot` on the Raspberry Pi           |
 
 #### Versions
 
-| Name                       | Required           | Default   | Description                                              |
-|----------------------------|:------------------:|-----------|----------------------------------------------------------|
-| `bootstrap_kernel_version` | :heavy_check_mark: | `4.11.y`  | Version of the Raspberry Pi kernel to build (git branch) |
-| `bootstrap_extraversion`   | :heavy_check_mark: | `+stuvus` | Extraversion to append on the kernel                     |
-| `bootstrap_ubuntu_release` | :heavy_check_mark: | `yakkety` | Ubuntu release name to install                           |
+| Name                       | Required                 | Default   | Description                                              |
+|----------------------------|:------------------------:|-----------|----------------------------------------------------------|
+| `bootstrap_kernel_version` | :heavy_multiplication_x: | `4.11.y`  | Version of the Raspberry Pi kernel to build (git branch) |
+| `bootstrap_extraversion`   | :heavy_multiplication_x: | `+stuvus` | Extraversion to append on the kernel                     |
+| `bootstrap_ubuntu_release` | :heavy_multiplication_x: | `yakkety` | Ubuntu release name to install                           |
 
 #### User
 
@@ -57,8 +57,8 @@ On Arch, you also need the Ubuntu keyring package from the AUR.
 
 #### Network
 
-| Name                | Required           | Default | Description |
-|---------------------|:------------------:|---------|-------------|
+| Name                | Required           | Default | Description                                   |
+|---------------------|:------------------:|---------|-----------------------------------------------|
 | `bootstrap_address` | :heavy_check_mark: |         | Address of the Raspberry Pi network interface |
 | `bootstrap_netmask` | :heavy_check_mark: |         | Netmask of the Raspberry Pi network interface |
 | `bootstrap_gateway` | :heavy_check_mark: |         | Gateway of the Raspberry Pi network interface |
