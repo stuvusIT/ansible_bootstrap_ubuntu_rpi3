@@ -3,6 +3,7 @@
   parted:
     device: "{{ bootstrap_device | mandatory }}"
     number: 1
+    state: present
     part_end: "{{ bootstrap_boot_size | mandatory }}"
     part_type: primary
 
@@ -10,21 +11,27 @@
   parted:
     device: "{{ bootstrap_device | mandatory }}"
     number: 2
+    state: present
+    part_start: "{{ bootstrap_boot_size | mandatory }}"
     part_type: primary
 
 - name: Assign LBA flag
   command: "parted {{ bootstrap_device | mandatory }} set 1 lba on"
   changed_when: false
 
+- name: Check for FAT32
+  command: "blkid -s TYPE {{ bootstrap_device | mandatory }}1"
+  changed_when: false
+  register: fatpart
+
 - name: Make FAT32
-  filesystem:
-    dev: "{{ bootstrap_device | mandatory }}1"
-    fstype: fat
-    opts: "-F 32 -n BOOT"
+  command: "mkfs.fat -F 32 -n BOOT {{ bootstrap_device | mandatory }}1"
+  when: "not 'ext4' in fatpart.stdout"
 
 - name: Make ext4
   filesystem:
     dev: "{{ bootstrap_device | mandatory }}2"
     fstype: ext4
+    force: yes
     opts: "-L root"
 
