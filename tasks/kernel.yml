@@ -14,10 +14,17 @@
     line: "EXTRAVERSION = {{ bootstrap_extraversion }}"
 
 - name: Configure kernel
-  command:
-    cmd: make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcmrpi3_defconfig
+  copy:
+    src: "{{ global_cache_dir }}/rpi3-kernel/arch/arm64/configs/bcmrpi3_defconfig"
+    dest: "{{ global_cache_dir }}/rpi3-kernel/.config"
+    remote_src: True
+
+- name: Run oldconfig
+  shell:
+    cmd: "yes '' | make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- oldconfig"
     chdir: "{{ global_cache_dir }}/rpi3-kernel"
-  changed_when: false
+  register: out
+  changed_when: "'NEW' in out.stdout"
 
 - name: Build kernel
   command:
