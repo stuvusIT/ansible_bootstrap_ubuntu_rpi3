@@ -13,8 +13,6 @@ This role is not capable of updating an existing Raspberry Pi without reinstalli
 
 You need internet access on the control machine to download the kernel, the firmware, and Ubuntu.
 
-You need internet access on the server to clone Vault.
-
 ## Requirements
 
 A dpkg- or pacman-based Linux distribution on the host machine.
