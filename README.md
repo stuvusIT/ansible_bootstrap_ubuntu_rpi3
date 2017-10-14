@@ -3,6 +3,7 @@
 This role sets up a Raspberry Pi 3 SD card with a minimal Ubuntu configuration for use with Ansible.
 Only a SSH server is installed along with Python.
 Also, the network is configured with a static IP address.
+The apt repositories will be set to ubuntu-ports, as arm architectures are not supported by the default sources.
 
 This role can not run on the Raspberry Pi directly, instead it's supposed to be run on the control machine.
 The SD card must be inserted into the control machine and this role will install everything on it.
