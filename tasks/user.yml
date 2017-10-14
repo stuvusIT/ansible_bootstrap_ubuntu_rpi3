@@ -24,3 +24,10 @@
     group: root
   when: "bootstrap_root_key is defined"
 
+- name: Configure apt sources
+  template:
+    src: sources.list.j2
+    dest: "{{ global_cache_dir }}/rpi3-mount/etc/apt/sources.list"
+    mode: 0644
+    owner: root
+    group: root
