@@ -1,15 +1,15 @@
 ---
-- include: prepare.yml
-- include: partitions.yml
-- include: firmware.yml
-- include: kernel.yml
+- import_tasks: prepare.yml
+- import_tasks: partitions.yml
+- import_tasks: firmware.yml
+- import_tasks: kernel.yml
 # Mount partitions and add data
 - block:
-  - include: mount.yml
-  - include: debootstrap.yml
-  - include: boot.yml
-  - include: user.yml
+  - import_tasks: mount.yml
+  - import_tasks: debootstrap.yml
+  - import_tasks: boot.yml
+  - import_tasks: user.yml
   rescue:
-    - include: umount.yml
-- include: umount.yml
+    - import_tasks: umount.yml
+- import_tasks: umount.yml
 
