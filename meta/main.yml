@@ -1,3 +1,4 @@
+---
 galaxy_info:
   author: Janne Heß
   description: Bootstrap a Raspberry Pi 3 with Ubuntu for use with Ansible
